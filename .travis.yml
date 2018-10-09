@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  - '8'
+before_install:
+  - npm i -g npm@latest
+install:
+  - npm ci
+script:
+  - npm test
+cache: yarn
+deploy:
+  provider: npm
+  email: ammmze@gmail.com
+  skip_cleanup: true
+  api_key:
+    secure: F7/T185RwUfFzTwl4Is7yFgQ/UvIaMnv25T749+Edd3gMnNfi6mAHyw0g/4ByBId7DwCbSPo4FlTsdPxHkMmpEYJHfEp09mhjQIZhX3Ut1dqdGFRj8nbGdvxL+H1MuHSR1PMUeY7WflYTIP9wflx0TPf/H/kB6p5a3/HY7du+YfkftvLK6oaPt+m00GWs/xL0s7YCksPbi1pPdeD6oT+t//HwzlwSxEnDCgm9hUmZ6bgmjHpxwcu8UoyKmfIs7ZLDbtsDNEihVzc+Z2zegaFHD6Zc9i+QBgE7jdNaIxASu1NptmjyO/OgpHpCswzQ1wGad+HED9gcm11KQIvOC+5Xrxjh0jaqoY7trT5wKiWIdrnUzdghg7cFYe/27Y0XQUUDF1gKf9ybpjQF5NuaXHTIEijjxP0smnGZKgu3UXmRxufCHuZa32jUTezVQS0U1wjal0T2nj+Im6TwPJ/9KUTuc68t8qZt4hZYwjlBX4MIkuEWRPbi2ZeKjZMAyQYR7AnkRaFsKOApFtDPxWfQ22OQoHreeNV5u1kjzPlWrxT5O1GTR/0A2rab0FDPC8DOaNflhnqTW1y3hYZCiLmfgC5qciD/cFLoOPpwKqVmQzvFr0cc0iVODdO0C1O6snPCJ6l9kTWPsPbp25DUzL6yDMpQ4Mm0RmwAS9f9fPNpKNUsd0=
+  on:
+    tags: true
+    repo: MashupMill/hubot-rally

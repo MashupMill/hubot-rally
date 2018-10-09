@@ -1,5 +1,6 @@
 .idea/
 *.iml
+lib/
 
 # Logs
 logs
