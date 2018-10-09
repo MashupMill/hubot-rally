@@ -28,6 +28,16 @@ const restApi = rally({
     }
 });
 
+const getType = ticket => {
+    switch (ticket.toLowerCase().replace(/[^a-z]*/g, '')) {
+        case 'de': return 'defect';
+        case 'ta': return 'tasks';
+        case 'tc': return 'testcases';
+        case 'f': return 'portfolioitem/feature';
+        case 'us': default: return 'hierarchicalrequirement';
+    }
+};
+
 export default
 module.exports = (robot) => {
     robot.hear(RALLY_TICKET_REGEX, res => {
@@ -35,19 +45,22 @@ module.exports = (robot) => {
 
         if (!tickets.length) return;
 
-        restApi.query({
-            type: 'artifact',
-            qs: {
-                types: 'defect,hierarchicalrequirement,testcases,tasks,portfolioitem/feature'
-            },
+        Promise.all(tickets.map(ticket => (restApi.query({
+            // type: 'artifact',
+            // qs: {
+            //     types: 'defect,hierarchicalrequirement,testcases,tasks,portfolioitem/feature'
+            // },
             //type: type, //text.toLowerCase().startsWith('de') ? 'defect' : 'hierarchicalrequirement',
+            type: getType(ticket),
             start: 1,
             pageSize: 10,
             order: 'Rank',
             fetch: ['FormattedID', 'Name', 'ScheduleState', 'State', 'DisplayColor', 'Owner', 'Project', 'Release'],
-            query: queryUtils.where('FormattedID', '=', tickets[0])//.or('Name', 'contains', text)
-        }).then(response => {
-            const results = response.Results;
+            query: queryUtils.where('FormattedID', '=', ticket)//.or('Name', 'contains', text)
+        })))).then(responses => {
+            const results = responses.reduce(((previousValue, currentValue) => (
+                previousValue.concat(currentValue.Results)
+            )), []);
 
             if (results.length === 0) return;
 
@@ -57,7 +70,7 @@ module.exports = (robot) => {
                 username: 'Rally',
                 icon_url: 'https://avatars0.githubusercontent.com/u/1316658',
                 as_user: false,
-                text: `Results for "${text}"`,
+                text: `Results from Rally`,
                 attachments: results.map(({
                     FormattedID,
                     Name,
@@ -83,7 +96,5 @@ module.exports = (robot) => {
         }).catch(err => {
             console.error('Failed to search for rally tickets', err);
         });
-
-        //res.send(tickets.map(FormattedID => `https://rally1.rallydev.com/#/search?keywords=${FormattedID}`).join("\n"));
     })
 };

@@ -18,6 +18,7 @@ describe('hubot-rally', () => {
             expect(room.messages[room.messages.length - 1]).to.eql(['jsmith', `show me gus12345`])
         })
     });
+    // TODO: need to mock the rally api
     // it('should give link to ticket', () => {
     //     return room.user.say('jsmith', 'US12345 is ready').then(() => {
     //         expect(room.messages[room.messages.length - 1]).to.eql(['hubot', `https://rally1.rallydev.com/#/search?keywords=US12345`])
