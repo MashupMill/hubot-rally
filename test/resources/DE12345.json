@@ -1,0 +1,44 @@
+{
+  "_rallyAPIMajor": "2",
+  "_rallyAPIMinor": "0",
+  "_ref": "https://rally1.rallydev.com/slm/webservice/v2.0/defect/6546841651654",
+  "_refObjectUUID": "525b5c55-c636-4495-b4cf-c3834f031165",
+  "_objectVersion": "80",
+  "_refObjectName": "Fix something cool",
+  "DisplayColor": "#f9a814",
+  "FormattedID": "DE12345",
+  "Name": "Fix something cool",
+  "Owner": {
+    "_rallyAPIMajor": "2",
+    "_rallyAPIMinor": "0",
+    "_ref": "https://rally1.rallydev.com/slm/webservice/v2.0/user/65419468765",
+    "_refObjectUUID": "13a56784-dbdd-4277-a38f-2716f9515728",
+    "_objectVersion": "2354",
+    "_refObjectName": "John",
+    "_type": "User"
+  },
+  "Project": {
+    "_rallyAPIMajor": "2",
+    "_rallyAPIMinor": "0",
+    "_ref": "https://rally1.rallydev.com/slm/webservice/v2.0/project/365168435465",
+    "_refObjectUUID": "e3279d7d-3258-4cb1-82b2-128162e332fa",
+    "_objectVersion": "2",
+    "_refObjectName": "Wild Boars",
+    "Name": "Wild Boars",
+    "Owner": {
+      "_rallyAPIMajor": "2",
+      "_rallyAPIMinor": "0",
+      "_ref": "https://rally1.rallydev.com/slm/webservice/v2.0/user/654164651",
+      "_refObjectUUID": "eeeb5a8c-8d56-4d39-893d-87f5fe31548c",
+      "_objectVersion": "2241",
+      "_refObjectName": "Jane",
+      "_type": "User"
+    },
+    "State": "Open",
+    "_type": "Project"
+  },
+  "ScheduleState": "In-Progress",
+  "Blocked": false,
+  "State": "Open",
+  "_type": "Defect"
+}

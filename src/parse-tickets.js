@@ -1,4 +1,4 @@
-export const RALLY_TICKET_REGEX = /^(\s*|.+\s)((US|DE|TA|F|TC)[\d]+)(\W.*|\s.*|)$/i
+export const RALLY_TICKET_REGEX = /^(\s*|.+\s)((US|DE|TA|F|TC|I)[\d]+)(\W.*|\s.*|)$/i
 
 const parse = message => {
     const matches = RALLY_TICKET_REGEX.exec(message);

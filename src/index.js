@@ -8,25 +8,14 @@
 //   RALLY_API_KEY
 //
 // Commands:
-//   hubot <trigger> - <what the respond trigger does>
-//   <trigger> - <what the hear trigger does>
+//   <FormattedID> - <Some rally ticket FormattedID>
 //
 // Author:
 //   Branden Cash
-import rally from "rally";
-import parseTickets, { RALLY_TICKET_REGEX } from './parse-tickets';
-const queryUtils = rally.util.query;
 
-const restApi = rally({
-    apiKey: process.env.RALLY_API_KEY,
-    requestOptions: {
-        headers: {
-            'X-RallyIntegrationName': require('../package.json').name,
-            'X-RallyIntegrationVendor': require('../package.json').author,
-            'X-RallyIntegrationVersion': require('../package.json').version
-        }
-    }
-});
+import { util as rallyUtils }  from "rally";
+import rallyClient from './rally-client';
+import parseTickets, { RALLY_TICKET_REGEX } from './parse-tickets';
 
 const getType = ticket => {
     switch (ticket.toLowerCase().replace(/[^a-z]*/g, '')) {
@@ -34,67 +23,61 @@ const getType = ticket => {
         case 'ta': return 'tasks';
         case 'tc': return 'testcases';
         case 'f': return 'portfolioitem/feature';
+        case 'i': return 'portfolioitem/initiative';
         case 'us': default: return 'hierarchicalrequirement';
     }
 };
 
 export default
 module.exports = (robot) => {
-    robot.hear(RALLY_TICKET_REGEX, res => {
+    robot.hear(RALLY_TICKET_REGEX, async res => {
         const tickets = parseTickets(res.message.text);
 
         if (!tickets.length) return;
 
-        Promise.all(tickets.map(ticket => (restApi.query({
-            // type: 'artifact',
-            // qs: {
-            //     types: 'defect,hierarchicalrequirement,testcases,tasks,portfolioitem/feature'
-            // },
-            //type: type, //text.toLowerCase().startsWith('de') ? 'defect' : 'hierarchicalrequirement',
+        const responses = await Promise.all(tickets.map(ticket => (rallyClient().query({
             type: getType(ticket),
             start: 1,
             pageSize: 10,
             order: 'Rank',
             fetch: ['FormattedID', 'Name', 'ScheduleState', 'State', 'DisplayColor', 'Owner', 'Project', 'Release'],
-            query: queryUtils.where('FormattedID', '=', ticket)//.or('Name', 'contains', text)
-        })))).then(responses => {
-            const results = responses.reduce(((previousValue, currentValue) => (
-                previousValue.concat(currentValue.Results)
-            )), []);
+            query: rallyUtils.query.where('FormattedID', '=', ticket)
+        }))));
 
-            if (results.length === 0) return;
+        const results = responses.reduce(((previousValue, currentValue) => (
+            previousValue.concat(currentValue.Results)
+        )), []);
 
-            console.debug(JSON.stringify(results));
+        if (results.length === 0) return;
 
-            res.send({
-                username: 'Rally',
-                icon_url: 'https://avatars0.githubusercontent.com/u/1316658',
-                as_user: false,
-                text: `Results from Rally`,
-                attachments: results.map(({
-                    FormattedID,
-                    Name,
-                    ScheduleState,
-                    State,
-                    DisplayColor,
-                    Release,
-                    Owner,
-                    Project,
-                }) => ({
-                    title: `${FormattedID}: ${Name}`,
-                    title_link: `https://rally1.rallydev.com/#/search?keywords=${FormattedID}`,
-                    color: DisplayColor,
-                    fields: [
-                        { title: 'Schedule State', value: ScheduleState && `\`${ScheduleState}\`` || '_Undefined_', short: true },
-                        { title: 'State', value: State && `\`${typeof State === 'string' ? State : State._refObjectName}\`` || '_Undefined_', short: true },
-                        { title: 'Owner', value: (Owner && Owner._refObjectName || '_Unassigned_'), short: true },
-                        { title: 'Project', value: (Project && Project._refObjectName || '_Unassigned_'), short: true },
-                        { title: 'Release', value: (Release && Release.Name || null) || '_Unscheduled_', short: true }
-                    ]
-                }))
-            })
-        }).catch(err => {
-            console.error('Failed to search for rally tickets', err);
-        });
+        //console.debug(JSON.stringify(results));
+
+        return res.send({
+            username: 'Rally',
+            icon_url: 'https://avatars0.githubusercontent.com/u/1316658',
+            as_user: false,
+            text: `Results from Rally`,
+            attachments: results.map(({
+                FormattedID,
+                Name,
+                ScheduleState,
+                State,
+                DisplayColor,
+                Release,
+                Owner,
+                Project,
+            }) => ({
+                title: `${FormattedID}: ${Name}`,
+                title_link: `https://rally1.rallydev.com/#/search?keywords=${FormattedID}`,
+                color: DisplayColor,
+                fields: [
+                    { title: 'Schedule State', value: ScheduleState && `\`${ScheduleState}\`` || '_Undefined_', short: true },
+                    { title: 'State', value: State && `\`${typeof State === 'string' ? State : State._refObjectName}\`` || '_Undefined_', short: true },
+                    { title: 'Owner', value: (Owner && Owner._refObjectName || '_Unassigned_'), short: true },
+                    { title: 'Project', value: (Project && Project._refObjectName || '_Unassigned_'), short: true },
+                    { title: 'Release', value: (Release && Release.Name || null) || '_Unscheduled_', short: true }
+                ]
+            }))
+        })
     })
 };

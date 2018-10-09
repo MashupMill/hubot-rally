@@ -1,0 +1,75 @@
+{
+  "_rallyAPIMajor": "2",
+  "_rallyAPIMinor": "0",
+  "_ref": "https://rally1.rallydev.com/slm/webservice/v2.0/hierarchicalrequirement/246382458988",
+  "_refObjectUUID": "e71e875f-2f3b-4be7-aace-dad098fd73a8",
+  "_objectVersion": "22",
+  "_refObjectName": "Create Something Cool",
+  "DisplayColor": "#107c1e",
+  "FormattedID": "US12345",
+  "DirectChildrenCount": 0,
+  "Name": "Create Something Cool",
+  "Owner": {
+    "_rallyAPIMajor": "2",
+    "_rallyAPIMinor": "0",
+    "_ref": "https://rally1.rallydev.com/slm/webservice/v2.0/user/65419468765",
+    "_refObjectUUID": "13a56784-dbdd-4277-a38f-2716f9515728",
+    "_objectVersion": "2354",
+    "_refObjectName": "John",
+    "_type": "User"
+  },
+  "Project": {
+    "_rallyAPIMajor": "2",
+    "_rallyAPIMinor": "0",
+    "_ref": "https://rally1.rallydev.com/slm/webservice/v2.0/project/365168435465",
+    "_refObjectUUID": "e3279d7d-3258-4cb1-82b2-128162e332fa",
+    "_objectVersion": "2",
+    "_refObjectName": "Wild Boars",
+    "Name": "Wild Boars",
+    "Owner": {
+      "_rallyAPIMajor": "2",
+      "_rallyAPIMinor": "0",
+      "_ref": "https://rally1.rallydev.com/slm/webservice/v2.0/user/654164651",
+      "_refObjectUUID": "eeeb5a8c-8d56-4d39-893d-87f5fe31548c",
+      "_objectVersion": "2241",
+      "_refObjectName": "Jane",
+      "_type": "User"
+    },
+    "State": "Open",
+    "_type": "Project"
+  },
+  "ScheduleState": "Released",
+  "Blocked": false,
+  "Release": {
+    "_rallyAPIMajor": "2",
+    "_rallyAPIMinor": "0",
+    "_ref": "https://rally1.rallydev.com/slm/webservice/v2.0/release/166517953328",
+    "_refObjectUUID": "dece4ae0-035f-4246-a80c-9e4725d24778",
+    "_objectVersion": "2",
+    "_refObjectName": "1.0.0",
+    "Name": "1.0.0",
+    "Project": {
+      "_rallyAPIMajor": "2",
+      "_rallyAPIMinor": "0",
+      "_ref": "https://rally1.rallydev.com/slm/webservice/v2.0/project/365168435465",
+      "_refObjectUUID": "e3279d7d-3258-4cb1-82b2-128162e332fa",
+      "_objectVersion": "2",
+      "_refObjectName": "Wild Boars",
+      "Name": "Wild Boars",
+      "Owner": {
+        "_rallyAPIMajor": "2",
+        "_rallyAPIMinor": "0",
+        "_ref": "https://rally1.rallydev.com/slm/webservice/v2.0/user/654164651",
+        "_refObjectUUID": "eeeb5a8c-8d56-4d39-893d-87f5fe31548c",
+        "_objectVersion": "2241",
+        "_refObjectName": "Jane",
+        "_type": "User"
+      },
+      "State": "Open",
+      "_type": "Project"
+    },
+    "State": "Released",
+    "_type": "Release"
+  },
+  "_type": "HierarchicalRequirement"
+}
