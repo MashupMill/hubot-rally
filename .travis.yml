@@ -8,6 +8,7 @@ install:
 script:
   - npm test
 cache: yarn
+after_success: npm run coverage
 deploy:
   provider: npm
   email: ammmze@gmail.com

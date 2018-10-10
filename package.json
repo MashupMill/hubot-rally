@@ -4,8 +4,9 @@
   "description": "A hubot script to do rally stuff",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha",
-    "prepare": "babel --copy-files -d lib src"
+    "test": "cross-env NODE_ENV=test nyc mocha",
+    "prepare": "babel --copy-files -d lib src",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "files": [
     "lib"
@@ -34,9 +35,20 @@
     "@babel/plugin-transform-async-to-generator": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/register": "^7.0.0",
+    "babel-plugin-istanbul": "^5.0.1",
     "chai": "^4.2.0",
+    "coveralls": "^3.0.2",
+    "cross-env": "^5.2.0",
     "hubot-test-helper": "^1.9.0",
     "mocha": "^5.2.0",
+    "nyc": "^13.0.1",
     "sinon": "^6.3.5"
+  },
+  "nyc": {
+    "require": [
+      "@babel/register"
+    ],
+    "sourceMap": false,
+    "instrument": false
   }
 }
