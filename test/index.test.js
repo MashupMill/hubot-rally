@@ -30,6 +30,13 @@ describe('hubot-rally', () => {
         expect(room.messages[room.messages.length - 1]).to.eql(['jsmith', `show me gus12345`])
     });
 
+    it('not send any message when no results are found', async () => {
+        query.returns({Results: []});
+        await room.user.say('jsmith', 'US12345 is ready');
+        await delay(10);
+        expect(room.messages[room.messages.length - 1]).to.eql(['jsmith', 'US12345 is ready'])
+    });
+
     // TODO: may be more useful to have separate tests that just simply test the transform of a rally result to an 'attachment' and these tests can be slimmed down to not check the messages so deeply
     it('should give link to ticket', async () => {
         query.returns({ Results: [US12345] });

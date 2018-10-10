@@ -17,22 +17,23 @@ import { util as rallyUtils }  from "rally";
 import rallyClient from './rally-client';
 import parseTickets, { RALLY_TICKET_REGEX } from './parse-tickets';
 
-const getType = ticket => {
-    switch (ticket.toLowerCase().replace(/[^a-z]*/g, '')) {
-        case 'de': return 'defect';
-        case 'ta': return 'tasks';
-        case 'tc': return 'testcases';
-        case 'f': return 'portfolioitem/feature';
-        case 'i': return 'portfolioitem/initiative';
-        case 'us': default: return 'hierarchicalrequirement';
-    }
+const typeMap = {
+    'de': 'defect',
+    'ta': 'tasks',
+    'tc': 'testcases',
+    'f': 'portfolioitem/feature',
+    'i': 'portfolioitem/initiative',
+    'us': 'hierarchicalrequirement'
 };
+
+const getType = ticket => typeMap[ticket.toLowerCase().replace(/[^a-z]*/g, '')];
 
 export default
 module.exports = (robot) => {
     robot.hear(RALLY_TICKET_REGEX, async res => {
         const tickets = parseTickets(res.message.text);
 
+        /* istanbul ignore next */
         if (!tickets.length) return;
 
         const responses = await Promise.all(tickets.map(ticket => (rallyClient().query({
