@@ -1,6 +1,6 @@
 {
   "name": "@mashupmill/hubot-rally",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A hubot script to do rally stuff",
   "main": "lib/index.js",
   "scripts": {
