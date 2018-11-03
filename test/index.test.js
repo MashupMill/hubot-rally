@@ -25,8 +25,57 @@ describe('hubot-rally', () => {
         client.restore();
     });
 
-    it('should not response when a ticket is not given', async () => {
+    it('should allow blacklisting words', async () => {
+        query.returns({ Results: [US12345] });
+        await room.user.say('jsmith', '@hubot rally-blacklist add f5');
+        await room.user.say('jsmith', 'lets update the f5');
+
+        await delay(10);
+        expect(room.messages.length).to.equal(3);
+    });
+
+    it('should still return results for non-blacklisted tickets', async () => {
+        query.returns({ Results: [US12345] });
+        await room.user.say('jsmith', '@hubot rally-blacklist add f5');
+        await room.user.say('jsmith', 'lets update the f5 for us12345');
+
+        await delay(10);
+        expect(room.messages.length).to.equal(4);
+    });
+
+    it('should allow removing blacklisted words', async () => {
+        query.returns({ Results: [US12345] });
+        await room.user.say('jsmith', '@hubot rally-blacklist add f5');
+        await room.user.say('jsmith', '@hubot rally-blacklist remove f5');
+        await room.user.say('jsmith', 'lets update the f5');
+
+        await delay(10);
+        expect(room.messages.length).to.equal(7);
+    });
+
+    it('should allow disabling rally', async () => {
+        query.returns({ Results: [US12345] });
+        await room.user.say('jsmith', '@hubot rally-disable');
+        await room.user.say('jsmith', 'look at us12345');
+
+        await delay(10);
+        expect(room.messages.length).to.equal(3);
+    });
+
+    it('should allow re-enabling rally', async () => {
+        query.returns({ Results: [US12345] });
+        await room.user.say('jsmith', '@hubot rally-disable');
+        await room.user.say('jsmith', '@hubot rally-enable');
+        await room.user.say('jsmith', 'look at us12345');
+
+        await delay(10);
+        expect(room.messages.length).to.equal(6);
+    });
+
+    it('should not respond when a ticket is not given', async () => {
+        query.returns({ Results: [US12345] });
         await room.user.say('jsmith', 'show me gus12345');
+        await delay(10);
         expect(room.messages[room.messages.length - 1]).to.eql(['jsmith', `show me gus12345`])
     });
 

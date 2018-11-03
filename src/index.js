@@ -30,8 +30,35 @@ const getType = ticket => typeMap[ticket.toLowerCase().replace(/[^a-z]*/g, '')];
 
 export default
 module.exports = (robot) => {
+    robot.respond(/rally-disable/, async res => {
+        robot.brain.set(`rally-enabled-${res.message.room}`, false);
+        res.send(`You got it! Disabling rally bot in ${res.message.room}`);
+    });
+
+    robot.respond(/rally-enable/, async res => {
+        robot.brain.set(`rally-enabled-${res.message.room}`, true);
+        res.send(`You got it! Enabling rally bot in ${res.message.room}`);
+    });
+    robot.respond(/rally-blacklist add (.+)/, async res => {
+        const blacklist = robot.brain.get(`rally-blacklist-${res.message.room}`) || [];
+        blacklist.push(res.match[1].toLowerCase());
+        robot.brain.set(`rally-blacklist-${res.message.room}`, blacklist);
+        res.send(`You got it! Blacklisting "${res.match[1]}" in ${res.message.room}`);
+    });
+
+    robot.respond(/rally-blacklist remove (.+)/, async res => {
+        const blacklist = (robot.brain.get(`rally-blacklist-${res.message.room}`) || [])
+        .filter(text => text !== res.match[1].toLowerCase());
+        robot.brain.set(`rally-blacklist-${res.message.room}`, blacklist);
+        res.send(`You got it! Removing "${res.match[1]}" from the blacklist in ${res.message.room}`);
+    });
+
     robot.hear(RALLY_TICKET_REGEX, async res => {
-        const tickets = parseTickets(res.message.text);
+        if (robot.brain.get(`rally-enabled-${res.message.room}`) === false) return;
+
+        const blacklist = robot.brain.get(`rally-blacklist-${res.message.room}`) || [];
+        const tickets = parseTickets(res.message.text)
+                        .filter(ticket => blacklist.indexOf(ticket.toLowerCase()) < 0);
 
         /* istanbul ignore next */
         if (!tickets.length) return;
@@ -80,5 +107,5 @@ module.exports = (robot) => {
                 ]
             }))
         })
-    })
+    });
 };
