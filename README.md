@@ -33,8 +33,14 @@ You can disable ticket matching in a room by saying `@hubot rally-disable`. And 
 ### Blacklisting tickets per room
 You can add tickets to a blacklist per room by saying `@hubot rally-blacklist add f5`. And to remove it from the blacklist, say `@hubot rally-blacklist remove f5`
 
+To view what is currently blacklisted, run `@hubot rally-blacklist` or `@hubot rally-blacklist show`
+
 
 ## Changelog
+
+### `0.3.0`
+
+* Added `@hubot rally-blacklist` / `@hubot rally-blacklist show` to show what is currently blacklisted
 
 ### `0.2.0`
 

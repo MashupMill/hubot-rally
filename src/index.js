@@ -53,6 +53,11 @@ module.exports = (robot) => {
         res.send(`You got it! Removing "${res.match[1]}" from the blacklist in ${res.message.room}`);
     });
 
+    robot.respond(/rally-blacklist( (show|list))?$/, async res => {
+        const blacklist = (robot.brain.get(`rally-blacklist-${res.message.room}`) || []);
+        res.send(`Here's the blacklist for ${res.message.room}: ${blacklist.map(item => `"${item}"`).join(', ')}`);
+    });
+
     robot.hear(RALLY_TICKET_REGEX, async res => {
         if (robot.brain.get(`rally-enabled-${res.message.room}`) === false) return;
 

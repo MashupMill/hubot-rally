@@ -53,6 +53,34 @@ describe('hubot-rally', () => {
         expect(room.messages.length).to.equal(7);
     });
 
+    it('should allow showing blacklisted words with command `show`', async () => {
+        query.returns({ Results: [US12345] });
+        await room.user.say('jsmith', '@hubot rally-blacklist add f5');
+        await room.user.say('jsmith', '@hubot rally-blacklist show');
+
+        await delay(10);
+        expect(room.messages[room.messages.length - 1][1]).to.equal("Here's the blacklist for room1: \"f5\"");
+    });
+
+    it('should allow showing blacklisted words when no command is given', async () => {
+        query.returns({ Results: [US12345] });
+        await room.user.say('jsmith', '@hubot rally-blacklist add f5');
+        await room.user.say('jsmith', '@hubot rally-blacklist');
+
+        await delay(10);
+        expect(room.messages[room.messages.length - 1][1]).to.equal("Here's the blacklist for room1: \"f5\"");
+    });
+
+    it('should allow concatenate words with a comma', async () => {
+        query.returns({ Results: [US12345] });
+        await room.user.say('jsmith', '@hubot rally-blacklist add f5');
+        await room.user.say('jsmith', '@hubot rally-blacklist add f6');
+        await room.user.say('jsmith', '@hubot rally-blacklist show');
+
+        await delay(10);
+        expect(room.messages[room.messages.length - 1][1]).to.equal("Here's the blacklist for room1: \"f5\", \"f6\"");
+    });
+
     it('should allow disabling rally', async () => {
         query.returns({ Results: [US12345] });
         await room.user.say('jsmith', '@hubot rally-disable');
